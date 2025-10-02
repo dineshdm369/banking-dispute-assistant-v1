@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Dict, Optional, Any
 from datetime import datetime
 from enum import Enum
@@ -117,6 +117,8 @@ class LaneResult(BaseModel):
 
 
 class AgentStep(BaseModel):
+    model_config = ConfigDict(json_encoders={datetime: lambda v: v.isoformat()})
+    
     step_name: str
     status: str
     start_time: datetime

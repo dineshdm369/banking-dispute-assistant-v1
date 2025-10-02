@@ -5,6 +5,7 @@ from typing import Dict, List, Any, Optional
 from openai import OpenAI
 import os
 from datetime import datetime
+from ..utils.helpers import safe_json_dumps
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -173,7 +174,7 @@ class OpenAIService:
             return f"""{base_info}
             
             Transaction Data Available:
-            {json.dumps(transactions, indent=2) if transactions else 'No matching transactions found'}
+            {safe_json_dumps(transactions) if transactions else 'No matching transactions found'}
             
             Analyze this transaction data for the dispute."""
             
@@ -182,7 +183,7 @@ class OpenAIService:
             return f"""{base_info}
             
             Past Disputes Data:
-            {json.dumps(past_disputes, indent=2) if past_disputes else 'No past disputes found'}
+            {safe_json_dumps(past_disputes) if past_disputes else 'No past disputes found'}
             
             Analyze patterns in past disputes for this merchant."""
             
@@ -191,7 +192,7 @@ class OpenAIService:
             return f"""{base_info}
             
             Merchant Risk Data:
-            {json.dumps(merchant_risk, indent=2) if merchant_risk else 'No merchant risk data available'}
+            {safe_json_dumps(merchant_risk) if merchant_risk else 'No merchant risk data available'}
             
             Assess the risk profile of this merchant."""
             
@@ -200,7 +201,7 @@ class OpenAIService:
             return f"""{base_info}
             
             Applicable Network Rules:
-            {json.dumps(network_rules, indent=2) if network_rules else 'No specific network rules found'}
+            {safe_json_dumps(network_rules) if network_rules else 'No specific network rules found'}
             
             Evaluate compliance with payment network rules."""
             
@@ -209,7 +210,7 @@ class OpenAIService:
             return f"""{base_info}
             
             Analysis Results from All Lanes:
-            {json.dumps(lane_results, indent=2)}
+            {safe_json_dumps(lane_results)}
             
             Synthesize all findings into a comprehensive assessment."""
             
@@ -218,7 +219,7 @@ class OpenAIService:
             return f"""{base_info}
             
             Final Assessment:
-            {json.dumps(assessment, indent=2)}
+            {safe_json_dumps(assessment)}
             
             Generate customer response and back-office documentation."""
             
@@ -227,7 +228,7 @@ class OpenAIService:
             return f"""{base_info}
             
             Complete Analysis:
-            {json.dumps(analysis, indent=2)}
+            {safe_json_dumps(analysis)}
             
             Review this analysis for quality and completeness."""
         

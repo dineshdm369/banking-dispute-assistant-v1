@@ -4,6 +4,12 @@ An AI-powered banking dispute processing system that demonstrates agentic workfl
 
 ## 🚀 Features
 
+### Enhanced User Experience
+- **User Authentication**: Role-based user selection with department tracking
+- **Session Management**: Unique session IDs for complete audit trails
+- **Real-time Progress**: Live updates during multi-stage processing
+- **Apple-inspired UI**: Clean, intuitive interface with responsive design
+
 ### Agentic Workflow Implementation
 The system implements a comprehensive agentic workflow:
 
@@ -20,10 +26,11 @@ The system implements a comprehensive agentic workflow:
 8. **Finalize** - Complete processing with potential loop-back
 
 ### Technical Capabilities
-- **OpenAI Integration**: Uses GPT-4o Mini with function calling
+- **OpenAI Integration**: Uses GPT-4o Mini with function calling and structured output
 - **Parallel Processing**: Async execution of analysis lanes for efficiency  
 - **Mock Banking APIs**: Realistic simulation of dispute filing and credit systems
-- **Real-time UI**: Apple-inspired Streamlit interface with live progress tracking
+- **Data Validation**: Pydantic v2 models with comprehensive validation
+- **Error Handling**: Robust error recovery and safe JSON serialization
 - **Observability Ready**: Structured for future tracing and monitoring integration
 
 ## 📁 Project Structure
@@ -31,11 +38,15 @@ The system implements a comprehensive agentic workflow:
 ```
 banking-dispute-agent/
 ├── data/                    # Mock data files (CSV format)
+│   ├── users.csv            # 10 user profiles with departments
 │   ├── transactions.csv     # 50 realistic banking transactions
 │   ├── past_disputes.csv    # 25 historical dispute records
 │   ├── merchant_risk.csv    # Risk profiles for 30 merchants
 │   ├── network_rules.csv    # Visa/Mastercard chargeback rules
 │   └── dispute_policies.csv # Bank dispute policies
+├── docs/                    # Documentation
+│   ├── ARCHITECTURE.md      # System architecture guide
+│   └── SPECIFICATION.md     # Technical specifications
 ├── src/
 │   ├── agents/             # Core agent implementation
 │   │   └── dispute_agent.py # Main agentic workflow
@@ -43,16 +54,17 @@ banking-dispute-agent/
 │   │   ├── data_service.py    # Data access and querying
 │   │   ├── openai_service.py  # OpenAI API integration
 │   │   └── mock_api_service.py # Mock banking APIs
-│   ├── models/             # Pydantic data models
+│   ├── models/             # Pydantic v2 data models
 │   │   └── __init__.py     # All data models and types
 │   └── utils/              # Utility functions
-│       └── helpers.py      # Common utilities and styling
-├── streamlit_app.py        # Main UI application
+│       └── helpers.py      # Common utilities and safe JSON handling
+├── streamlit_app.py        # Main UI application with user auth
 ├── test_system.py          # System verification script
 ├── generate_mock_data.py   # Data generation utility
 ├── requirements.txt        # Python dependencies
 ├── Dockerfile             # Container configuration
 ├── docker-compose.yml     # Multi-service deployment
+├── LICENSE                # MIT License
 ├── .env.example           # Environment template
 └── .env                   # Environment configuration
 ```
@@ -112,7 +124,8 @@ banking-dispute-agent/
 ### Filing a Dispute
 
 1. **Open the application** in your browser
-2. **Fill in the dispute form:**
+2. **Select a user profile** from the dropdown (e.g., John Smith - Customer Service)
+3. **Fill in the dispute form:**
    - Customer ID (e.g., CUST1234)
    - Card last 4 digits (e.g., 1234)  
    - Transaction amount
@@ -120,7 +133,7 @@ banking-dispute-agent/
    - Dispute category (Fraud, Billing Error, Authorization Issue)
    - Detailed reason for dispute
 
-3. **Click "Process Dispute"** to start the agentic workflow
+4. **Click "Process Dispute"** to start the agentic workflow
 
 4. **Watch real-time processing:**
    - See parallel lanes execute simultaneously
@@ -175,13 +188,14 @@ MOCK_API_DELAY=1.5          # Simulated API response time
 
 The system includes realistic mock data:
 
+- **10 user profiles** across different bank departments
 - **50 transactions** across 30 major merchants
 - **25 historical disputes** with various outcomes
 - **30 merchant risk profiles** with scoring
 - **5 network rules** for Visa/Mastercard compliance
 - **3 dispute policies** covering different categories
 
-All data uses realistic but fake information suitable for testing.
+All data uses realistic but fake information suitable for testing and education.
 
 ## 🔮 Future Enhancements
 
@@ -199,6 +213,9 @@ The system is designed for easy integration with observability tools:
 - [ ] Advanced ML risk scoring
 - [ ] Multi-language support
 - [ ] Compliance reporting dashboard
+- [ ] Database integration (PostgreSQL/MongoDB)
+- [ ] Role-based access control (RBAC)
+- [ ] API rate limiting and caching
 
 ## 🛡️ Security & Privacy
 
@@ -245,9 +262,15 @@ This is a demonstration project showcasing agentic workflow patterns. Key areas 
 4. **Integrations**: Add real banking system connections
 5. **Observability**: Implement comprehensive monitoring
 
+## 📚 Documentation
+
+For detailed technical information, see:
+- **[System Architecture](docs/ARCHITECTURE.md)** - Comprehensive architecture overview
+- **[Technical Specification](docs/SPECIFICATION.md)** - Detailed system specifications
+
 ## 📄 License
 
-This project is for educational and demonstration purposes. Please ensure compliance with your organization's policies when adapting for production use.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙋‍♂️ Support
 
@@ -259,5 +282,25 @@ For questions or issues:
 
 ---
 
-**Built with:** OpenAI GPT-4o Mini, Streamlit, Python 3.11, Pydantic, Pandas
+## 🎓 Educational Purpose Disclaimer
+
+**This project is created exclusively for educational and learning purposes.**
+
+- **All data used in this system is synthetic and fictitious** - no real financial information, customer data, or banking records are used
+- **Mock banking APIs simulate real systems** - no actual banking transactions or disputes are processed
+- **User profiles and scenarios are educational examples** - not representative of real banking operations
+- **AI reasoning and decisions are for demonstration only** - not suitable for production financial services
+
+This system is designed to teach and demonstrate:
+- Agentic AI workflow patterns
+- Multi-lane parallel processing
+- OpenAI integration best practices
+- Clean software architecture principles
+- Modern Python development techniques
+
+**For learning purposes only** - please ensure compliance with your organization's policies and applicable regulations before adapting any concepts for production use.
+
+---
+
+**Built with:** OpenAI GPT-4o Mini, Streamlit, Python 3.11, Pydantic v2, Pandas
 **Design inspiration:** Apple's design principles for clean, intuitive interfaces

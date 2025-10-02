@@ -2,8 +2,10 @@ import streamlit as st
 import asyncio
 import json
 import time
+import uuid
+import os
 from datetime import datetime
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 import pandas as pd
 
 # Import our modules
@@ -119,6 +121,15 @@ st.markdown("""
         background: #F2F2F7;
     }
     
+    /* User Authentication Section */
+    .user-auth-container {
+        background: linear-gradient(135deg, #E8F5E8 0%, #F0F8FF 100%);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border: 1px solid #D1E7DD;
+    }
+    
     /* Hide Streamlit branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
@@ -148,6 +159,75 @@ def initialize_app():
             st.stop()
 
 
+def load_users() -> pd.DataFrame:
+    """Load users from CSV file"""
+    try:
+        users_path = os.path.join("data", "users.csv")
+        return pd.read_csv(users_path)
+    except Exception as e:
+        st.error(f"Failed to load users: {e}")
+        return pd.DataFrame()
+
+
+def generate_session_id(user_id: str) -> str:
+    """Generate a unique session ID for the user"""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    unique_id = str(uuid.uuid4())[:8]
+    return f"{user_id}_{timestamp}_{unique_id}"
+
+
+def render_user_selection():
+    """Render user selection dropdown"""
+    st.markdown('<div class="section-header">👤 User Authentication</div>', unsafe_allow_html=True)
+    
+    users_df = load_users()
+    if users_df.empty:
+        st.error("No users found. Please check the users database.")
+        return False
+    
+    # Create user options for dropdown
+    user_options = ["Select a user..."] + users_df['user_name'].tolist()
+    
+    # User selection with styled container
+    st.markdown('<div class="user-auth-container">', unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        selected_user = st.selectbox(
+            "Select User",
+            options=user_options,
+            key="user_selection",
+            help="Select your user profile to continue"
+        )
+    
+    if selected_user != "Select a user...":
+        # Get user details
+        user_row = users_df[users_df['user_name'] == selected_user].iloc[0]
+        user_id = user_row['user_id']
+        department = user_row['department']
+        
+        # Generate session ID if not exists or user changed
+        if ('current_user_id' not in st.session_state or 
+            st.session_state.current_user_id != user_id):
+            st.session_state.session_id = generate_session_id(user_id)
+            st.session_state.current_user_id = user_id
+            st.session_state.current_user_name = selected_user
+            st.session_state.current_user_department = department
+        
+        # Display user info
+        col1, col2 = st.columns(2)
+        with col1:
+            st.success(f"✅ Authenticated as: **{selected_user}**")
+        with col2:
+            st.info(f"📋 Session: `{st.session_state.session_id[-12:]}`")  # Show last 12 chars for brevity
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+        return True
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    return False
+
+
 def render_header():
     """Render application header"""
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -167,6 +247,11 @@ def render_header():
 
 def render_dispute_form():
     """Render the dispute input form"""
+    # Check if user is authenticated
+    if 'current_user_id' not in st.session_state:
+        st.warning("⚠️ Please select a user above to continue with dispute processing.")
+        return
+    
     st.markdown('<div class="section-header">📋 File a Dispute</div>', unsafe_allow_html=True)
     
     with st.container():
@@ -240,6 +325,7 @@ def render_dispute_form():
                         additional_details=additional_details if additional_details else None
                     )
                     
+                    # Add user context to the dispute request
                     st.session_state.dispute_request = dispute_request
                     st.session_state.processing = True
                     st.rerun()
@@ -453,6 +539,14 @@ def render_dispute_response():
 def render_sidebar():
     """Render sidebar with system information"""
     with st.sidebar:
+        # User Session Information
+        if 'current_user_id' in st.session_state:
+            st.markdown("### 👤 Current Session")
+            st.success(f"**User:** {st.session_state.current_user_name}")
+            st.info(f"**Department:** {st.session_state.current_user_department}")
+            st.code(f"Session: {st.session_state.session_id}", language=None)
+            st.markdown("---")
+        
         st.markdown("### 🏦 System Status")
         
         if 'config' in st.session_state:
@@ -493,7 +587,11 @@ def render_sidebar():
                     "dispute_id": st.session_state.dispute_response.dispute_id,
                     "status": st.session_state.dispute_response.status.value,
                     "confidence": st.session_state.dispute_response.confidence_score,
-                    "timestamp": datetime.now().isoformat()
+                    "timestamp": datetime.now().isoformat(),
+                    "session_id": st.session_state.get('session_id', 'N/A'),
+                    "user_id": st.session_state.get('current_user_id', 'N/A'),
+                    "user_name": st.session_state.get('current_user_name', 'N/A'),
+                    "department": st.session_state.get('current_user_department', 'N/A')
                 }
                 
                 st.download_button(
@@ -513,26 +611,33 @@ def main():
     render_header()
     render_sidebar()
     
-    # Main content area
-    if 'processing' in st.session_state and st.session_state.processing:
-        render_processing_status()
-        render_lane_progress()
-    elif 'dispute_response' in st.session_state:
-        render_dispute_response()
-        render_agent_reasoning()
-        
-        # Option to file another dispute
-        st.markdown("---")
-        col1, col2, col3 = st.columns([1, 1, 1])
-        with col2:
-            if st.button("📝 File Another Dispute", use_container_width=True):
-                # Clear current dispute data but keep system initialized
-                for key in ['dispute_request', 'dispute_response', 'processing']:
-                    if key in st.session_state:
-                        del st.session_state[key]
-                st.rerun()
-    else:
-        render_dispute_form()
+    # User authentication section
+    user_authenticated = render_user_selection()
+    
+    # Add spacing
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Main content area - only show if user is authenticated
+    if user_authenticated:
+        if 'processing' in st.session_state and st.session_state.processing:
+            render_processing_status()
+            render_lane_progress()
+        elif 'dispute_response' in st.session_state:
+            render_dispute_response()
+            render_agent_reasoning()
+            
+            # Option to file another dispute
+            st.markdown("---")
+            col1, col2, col3 = st.columns([1, 1, 1])
+            with col2:
+                if st.button("📝 File Another Dispute", use_container_width=True):
+                    # Clear current dispute data but keep system initialized and user session
+                    for key in ['dispute_request', 'dispute_response', 'processing']:
+                        if key in st.session_state:
+                            del st.session_state[key]
+                    st.rerun()
+        else:
+            render_dispute_form()
     
     # Footer
     st.markdown("---")
