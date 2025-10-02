@@ -1,0 +1,4 @@
+policy_id,category,subcategory,time_limit_hours,max_amount,auto_approve_threshold,investigation_required,temporary_credit_eligible,documentation_required,processing_time_days,success_rate
+POL_001,Fraud,Unauthorized Transaction,72,10000.0,50.0,True,True,"['Police report for amounts > $500', 'Affidavit of fraud']",10,78.5
+POL_002,Billing Error,Duplicate Charge,168,5000.0,25.0,False,True,"['Transaction receipts', 'Bank statements']",5,92.3
+POL_003,Authorization Issue,Service Not Provided,720,2500.0,100.0,True,False,"['Service contract', 'Communication records']",15,65.8

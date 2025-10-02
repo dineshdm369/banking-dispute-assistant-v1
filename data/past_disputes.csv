@@ -1,0 +1,26 @@
+dispute_id,transaction_id,customer_id,merchant_name,dispute_reason,dispute_category,amount,dispute_date,resolution,resolution_date,notes,similar_cases
+DSP000001,TXN000031,CUST8890,Walmart,Unauthorized Charge,Fraud,416.09,2025-03-25,Pending Investigation,2025-04-01,Not cut house serve process father way fall card any.,5
+DSP000002,TXN000028,CUST2520,Starbucks,Fraudulent Transaction,Fraud,38.77,2025-02-02,Denied - Valid Charge,2025-02-05,Policy population although send south contain first expert skin admit order.,2
+DSP000003,TXN000029,CUST1823,Walmart,Unauthorized Charge,Authorization Issue,138.45,2024-10-13,Denied - Valid Charge,2024-10-15,Goal democratic organization production behind test more type summer improve able interest late.,1
+DSP000004,TXN000007,CUST4257,Amazon,Product Not Received,Fraud,163.48,2024-11-14,Approved - Refund Issued,2024-11-23,Many tree appear white near whom against dream try suddenly body.,2
+DSP000005,TXN000011,CUST4685,Walmart,Product Not Received,Authorization Issue,130.03,2025-05-19,Approved - Refund Issued,2025-06-13,Leave discussion sea already people challenge magazine through child draw.,2
+DSP000006,TXN000009,CUST9388,Walmart,Cancelled Subscription,Billing Error,74.5,2025-04-21,Chargeback Filed,2025-05-07,Including figure else their quality herself so program.,0
+DSP000007,TXN000021,CUST3507,Target,Fraudulent Transaction,Billing Error,151.88,2025-04-24,Pending Investigation,2025-05-24,Democratic eat simply than act move energy fact benefit big hold.,3
+DSP000008,TXN000028,CUST9169,Walmart,Billing Error,Fraud,193.95,2025-07-26,Approved - Refund Issued,2025-08-08,But magazine part seem official history page ground break history resource hundred.,0
+DSP000009,TXN000003,CUST5887,Walmart,Defective Product,Authorization Issue,114.42,2024-10-02,Merchant Credit Issued,2024-10-21,Help eat field safe community phone administration society hot then.,5
+DSP000010,TXN000048,CUST6147,Starbucks,Duplicate Charge,Fraud,251.95,2025-08-23,Approved - Partial Refund,2025-09-12,Both stage truth ready even budget cause option.,5
+DSP000011,TXN000025,CUST9998,McDonald's,Defective Product,Billing Error,334.59,2025-03-29,Approved - Partial Refund,2025-04-08,Resource soon which audience lot social sound anything through true father color organization.,4
+DSP000012,TXN000017,CUST7062,Target,ATM Error,Billing Error,143.12,2025-04-12,Pending Investigation,2025-05-11,Miss friend today political chair chair impact professional research me and majority.,1
+DSP000013,TXN000010,CUST5873,McDonald's,Fraudulent Transaction,Authorization Issue,396.64,2025-04-02,Merchant Credit Issued,2025-04-18,Republican resource consider quality end situation marriage deep country conference buy task perhaps.,1
+DSP000014,TXN000041,CUST2395,McDonald's,Service Not Provided,Authorization Issue,394.55,2024-10-09,Denied - Valid Charge,2024-10-25,Specific sister store term democratic its forget wife structure middle.,4
+DSP000015,TXN000005,CUST6409,Amazon,Product Not Received,Authorization Issue,420.51,2025-09-22,Denied - Valid Charge,2025-10-03,Military image decade guess want benefit.,0
+DSP000016,TXN000010,CUST7111,Walmart,Fraudulent Transaction,Billing Error,158.73,2025-05-15,Approved - Partial Refund,2025-06-02,Simple theory theory very smile too.,1
+DSP000017,TXN000031,CUST8132,Starbucks,Cancelled Subscription,Billing Error,258.0,2025-03-04,Approved - Refund Issued,2025-03-28,Economic blue anyone painting hope sea involve sea ball per imagine response.,2
+DSP000018,TXN000022,CUST8664,Starbucks,Service Not Provided,Authorization Issue,345.78,2025-02-06,Pending Investigation,2025-02-26,Sister particularly including allow suddenly strong want more knowledge performance.,4
+DSP000019,TXN000021,CUST8591,Amazon,Product Not Received,Authorization Issue,107.93,2025-09-10,Pending Investigation,2025-10-06,Computer animal sport black available owner tax interview agent experience personal report clearly.,0
+DSP000020,TXN000030,CUST7042,Starbucks,Processing Error,Authorization Issue,149.86,2025-05-27,Denied - Valid Charge,2025-06-14,Fire both around recognize analysis forward probably push relate series kind.,2
+DSP000021,TXN000024,CUST1941,Walmart,Unauthorized Charge,Fraud,21.3,2025-03-11,Chargeback Filed,2025-04-02,Stock wife half yourself health maintain quite door with.,5
+DSP000022,TXN000024,CUST9838,McDonald's,ATM Error,Authorization Issue,115.9,2025-04-01,Chargeback Filed,2025-04-09,Image true tonight role grow skill.,2
+DSP000023,TXN000004,CUST1819,McDonald's,Duplicate Charge,Authorization Issue,191.8,2025-06-14,Denied - Valid Charge,2025-07-07,Interest issue movement he enough father.,1
+DSP000024,TXN000018,CUST5117,Walmart,Unauthorized Charge,Billing Error,310.49,2025-06-17,Denied - Valid Charge,2025-07-04,Too TV first fill fine least top coach.,2
+DSP000025,TXN000021,CUST7613,Amazon,Defective Product,Fraud,43.1,2025-06-23,Pending Investigation,2025-06-27,Their east near right action arrive recent maybe these staff almost administration.,5

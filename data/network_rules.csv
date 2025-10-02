@@ -1,0 +1,6 @@
+rule_id,network,rule_type,description,time_limit_days,liability_shift,documentation_required,success_rate
+VISA_10.4,Visa,Fraud,Other Fraud - Card Absent Environment,120,Merchant,"Fraud evidence, transaction logs",75.5
+VISA_13.1,Visa,Authorization,Merchandise/Services Not Received,120,Merchant,"Delivery confirmation, service records",68.2
+MC_4837,Mastercard,Fraud,No Cardholder Authorization,120,Merchant,"Authorization records, signatures",72.8
+MC_4855,Mastercard,Processing Error,Goods/Services Not Provided,120,Merchant,Service delivery proof,65.4
+VISA_12.6.1,Visa,Processing Error,Duplicate Processing,120,Merchant,"Transaction records, receipts",85.6
