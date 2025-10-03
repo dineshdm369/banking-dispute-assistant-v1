@@ -125,9 +125,9 @@ class BankingDisputeAgent:
         )
         
         context = {
-            "matched_transaction": transaction.model_dump() if transaction else None,
-            "customer_transactions": [t.model_dump() for t in all_transactions[:10]],  # Limit for AI context
-            "applicable_policies": [p.model_dump() for p in policies],
+            "matched_transaction": transaction.dict() if transaction else None,
+            "customer_transactions": [t.dict() for t in all_transactions[:10]],  # Limit for AI context
+            "applicable_policies": [p.dict() for p in policies],
             "transactions_count": len(all_transactions)
         }
         
@@ -198,8 +198,8 @@ class BankingDisputeAgent:
             customer_disputes = self.data_service.get_past_disputes_by_customer(dispute_request.customer_id)
             
             context = {
-                "merchant_disputes": [d.model_dump() for d in past_disputes],
-                "customer_disputes": [d.model_dump() for d in customer_disputes],
+                "merchant_disputes": [d.dict() for d in past_disputes],
+                "customer_disputes": [d.dict() for d in customer_disputes],
                 "merchant_name": dispute_request.merchant_name,
                 "dispute_category": dispute_request.dispute_category
             }
@@ -247,7 +247,7 @@ class BankingDisputeAgent:
             merchant_risk = self.data_service.get_merchant_risk(dispute_request.merchant_name)
             
             context = {
-                "merchant_risk": merchant_risk.model_dump() if merchant_risk else None,
+                "merchant_risk": merchant_risk.dict() if merchant_risk else None,
                 "merchant_name": dispute_request.merchant_name,
                 "transaction_amount": dispute_request.transaction_amount
             }
@@ -298,7 +298,7 @@ class BankingDisputeAgent:
             network_rules = self.data_service.get_network_rules_by_category(dispute_request.dispute_category)
             
             context = {
-                "network_rules": [r.model_dump() for r in network_rules],
+                "network_rules": [r.dict() for r in network_rules],
                 "dispute_category": dispute_request.dispute_category,
                 "transaction_amount": dispute_request.transaction_amount
             }
@@ -346,8 +346,8 @@ class BankingDisputeAgent:
         logger.info("Synthesizing findings from all analysis lanes")
         
         context = {
-            "dispute_request": dispute_request.model_dump(),
-            "lane_results": [r.model_dump() for r in lane_results]
+            "dispute_request": dispute_request.dict(),
+            "lane_results": [r.dict() for r in lane_results]
         }
         
         # AI synthesis of all findings
@@ -388,7 +388,7 @@ class BankingDisputeAgent:
         logger.info("Generating customer response and back-office documentation")
         
         context = {
-            "dispute_request": dispute_request.model_dump(),
+            "dispute_request": dispute_request.dict(),
             "assessment": synthesis_result
         }
         
@@ -479,7 +479,7 @@ class BankingDisputeAgent:
         
         context = {
             "complete_analysis": {
-                "processing_steps": [s.model_dump() for s in self.processing_steps],
+                "processing_steps": [s.dict() for s in self.processing_steps],
                 "action_results": action_result
             }
         }
