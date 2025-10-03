@@ -28,11 +28,27 @@ class BankingDisputeAgent:
         self.mock_api_service = MockAPIService()
         self.processing_steps: List[AgentStep] = []
         self.confidence_threshold = float(os.getenv("CONFIDENCE_THRESHOLD", "0.7"))
+        self._current_user_id: Optional[str] = None
+        self._current_session_id: Optional[str] = None
         
     async def process_dispute(self, dispute_request: DisputeRequest) -> DisputeResponse:
         """Main entry point for processing a dispute using agentic workflow"""
         
-        logger.info(f"Starting dispute processing for customer {dispute_request.customer_id}")
+        # Store user and session context for observability throughout the process
+        self._current_user_id = dispute_request.user_id
+        self._current_session_id = dispute_request.session_id
+        
+        # Log with user and session context for observability
+        logger.info(
+            f"Starting dispute processing for customer {dispute_request.customer_id}",
+            extra={
+                "user_id": dispute_request.user_id,
+                "session_id": dispute_request.session_id,
+                "customer_id": dispute_request.customer_id,
+                "dispute_category": dispute_request.dispute_category,
+                "transaction_amount": dispute_request.transaction_amount
+            }
+        )
         self.processing_steps = []
         
         try:
@@ -70,7 +86,15 @@ class BankingDisputeAgent:
         """Step 1: Plan - Decide analysis steps"""
         start_time = datetime.now()
         
-        logger.info("Planning dispute analysis strategy")
+        logger.info(
+            "Planning dispute analysis strategy",
+            extra={
+                "user_id": dispute_request.user_id,
+                "session_id": dispute_request.session_id,
+                "step": "plan",
+                "customer_id": dispute_request.customer_id
+            }
+        )
         
         context = {
             "customer_id": dispute_request.customer_id,
@@ -104,7 +128,15 @@ class BankingDisputeAgent:
         """Step 2: Retrieve - Pull relevant data"""
         start_time = datetime.now()
         
-        logger.info("Retrieving transaction and policy data")
+        logger.info(
+            "Retrieving transaction and policy data",
+            extra={
+                "user_id": dispute_request.user_id,
+                "session_id": dispute_request.session_id,
+                "step": "retrieve",
+                "customer_id": dispute_request.customer_id
+            }
+        )
         
         # Find matching transaction
         transaction = self.data_service.find_transaction(
@@ -153,7 +185,15 @@ class BankingDisputeAgent:
     async def _fork_lanes(self, dispute_request: DisputeRequest, retrieve_result: Dict[str, Any]) -> List[LaneResult]:
         """Step 3: Fork into parallel analysis lanes"""
         
-        logger.info("Starting parallel analysis lanes")
+        logger.info(
+            "Starting parallel analysis lanes",
+            extra={
+                "user_id": dispute_request.user_id,
+                "session_id": dispute_request.session_id,
+                "step": "fork_lanes",
+                "customer_id": dispute_request.customer_id
+            }
+        )
         
         # Define the three lanes
         lane_tasks = [
@@ -189,7 +229,15 @@ class BankingDisputeAgent:
         start_time = datetime.now()
         
         try:
-            logger.info(f"Lane A: Analyzing past disputes for merchant {dispute_request.merchant_name}")
+            logger.info(
+                f"Lane A: Analyzing past disputes for merchant {dispute_request.merchant_name}",
+                extra={
+                    "user_id": dispute_request.user_id,
+                    "session_id": dispute_request.session_id,
+                    "lane": "past_disputes",
+                    "merchant_name": dispute_request.merchant_name
+                }
+            )
             
             # Get past disputes for this merchant
             past_disputes = self.data_service.get_past_disputes_by_merchant(dispute_request.merchant_name)
@@ -241,7 +289,15 @@ class BankingDisputeAgent:
         start_time = datetime.now()
         
         try:
-            logger.info(f"Lane B: Analyzing merchant risk for {dispute_request.merchant_name}")
+            logger.info(
+                f"Lane B: Analyzing merchant risk for {dispute_request.merchant_name}",
+                extra={
+                    "user_id": dispute_request.user_id,
+                    "session_id": dispute_request.session_id,
+                    "lane": "merchant_risk",
+                    "merchant_name": dispute_request.merchant_name
+                }
+            )
             
             # Get merchant risk data
             merchant_risk = self.data_service.get_merchant_risk(dispute_request.merchant_name)
@@ -292,7 +348,15 @@ class BankingDisputeAgent:
         start_time = datetime.now()
         
         try:
-            logger.info(f"Lane C: Analyzing network rules for {dispute_request.dispute_category}")
+            logger.info(
+                f"Lane C: Analyzing network rules for {dispute_request.dispute_category}",
+                extra={
+                    "user_id": dispute_request.user_id,
+                    "session_id": dispute_request.session_id,
+                    "lane": "network_rules",
+                    "dispute_category": dispute_request.dispute_category
+                }
+            )
             
             # Get applicable network rules
             network_rules = self.data_service.get_network_rules_by_category(dispute_request.dispute_category)
@@ -343,7 +407,16 @@ class BankingDisputeAgent:
         """Step 4: Synthesize - Merge lane findings into one view"""
         start_time = datetime.now()
         
-        logger.info("Synthesizing findings from all analysis lanes")
+        logger.info(
+            "Synthesizing findings from all analysis lanes",
+            extra={
+                "user_id": dispute_request.user_id,
+                "session_id": dispute_request.session_id,
+                "step": "synthesize",
+                "lane_count": len(lane_results),
+                "successful_lanes": len([r for r in lane_results if r.status == LaneStatus.COMPLETED])
+            }
+        )
         
         context = {
             "dispute_request": dispute_request.dict(),
@@ -415,7 +488,16 @@ class BankingDisputeAgent:
         """Step 6: Act - File dispute and issue temporary credit"""
         start_time = datetime.now()
         
-        logger.info("Taking action: filing dispute and processing credit")
+        logger.info(
+            "Taking action: filing dispute and processing credit",
+            extra={
+                "user_id": dispute_request.user_id,
+                "session_id": dispute_request.session_id,
+                "step": "act",
+                "customer_id": dispute_request.customer_id,
+                "transaction_amount": dispute_request.transaction_amount
+            }
+        )
         
         # Generate dispute ID
         dispute_id = await self.openai_service.generate_dispute_id()
@@ -515,7 +597,14 @@ class BankingDisputeAgent:
         """Step 8: Finalize - Create final response (with potential loop back)"""
         start_time = datetime.now()
         
-        logger.info("Finalizing dispute response")
+        logger.info(
+            "Finalizing dispute response",
+            extra={
+                "user_id": self._current_user_id,
+                "session_id": self._current_session_id,
+                "step": "finalize"
+            }
+        )
         
         # If critique suggests reprocessing and we haven't done it yet, we could loop back
         # For now, we'll proceed with current results but flag the quality concern

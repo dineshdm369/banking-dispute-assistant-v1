@@ -322,7 +322,9 @@ def render_dispute_form():
                         merchant_name=merchant_name,
                         dispute_reason=dispute_reason,
                         dispute_category=DisputeCategory(dispute_category),
-                        additional_details=additional_details if additional_details else None
+                        additional_details=additional_details if additional_details else None,
+                        user_id=st.session_state.get('current_user_id'),
+                        session_id=st.session_state.get('session_id')
                     )
                     
                     # Add user context to the dispute request

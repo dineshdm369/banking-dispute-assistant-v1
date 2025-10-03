@@ -51,6 +51,8 @@ class DisputeRequest(BaseModel):
     dispute_reason: str
     dispute_category: DisputeCategory
     additional_details: Optional[str] = None
+    user_id: Optional[str] = None
+    session_id: Optional[str] = None
 
 
 class PastDispute(BaseModel):
