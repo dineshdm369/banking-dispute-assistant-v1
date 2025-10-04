@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test script for Banking Dispute Agent
+Test script for banking-dispute-assistant-v1
 """
 
 import sys
@@ -19,7 +19,7 @@ from src.utils.helpers import setup_logging, load_environment
 
 async def test_basic_functionality():
     """Test basic functionality without OpenAI"""
-    print("🧪 Testing Banking Dispute Agent Components...")
+    print("🧪 Testing banking-dispute-assistant-v1 Components...")
     
     # Set up logging
     setup_logging("INFO")
@@ -148,7 +148,7 @@ def test_data_files():
 
 async def main():
     """Main test function"""
-    print("🚀 Banking Dispute Agent - System Test")
+    print("🚀 banking-dispute-assistant-v1 - System Test")
     print("=" * 50)
     
     # Test data files first

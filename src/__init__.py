@@ -1,1 +1,1 @@
-# Banking Dispute Agent - Main Package
+# banking-dispute-assistant-v1 - Main Package

@@ -10,7 +10,7 @@ import pandas as pd
 
 # Import our modules
 from src.models import DisputeRequest, DisputeCategory
-from src.agents.dispute_agent import BankingDisputeAgent
+from src.agents.intelligent_dispute_agent import IntelligentDisputeAgent
 from src.utils.helpers import (
     setup_logging, load_environment, validate_config,
     format_currency, mask_sensitive_data, get_status_color, UI_COLORS
@@ -18,7 +18,7 @@ from src.utils.helpers import (
 
 # Page configuration
 st.set_page_config(
-    page_title="Banking Dispute Agent",
+    page_title="banking-dispute-assistant-v1",
     page_icon="🏦",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -151,7 +151,7 @@ def initialize_app():
         try:
             validate_config(config)
             st.session_state.config = config
-            st.session_state.agent = BankingDisputeAgent(config.get('openai_api_key'))
+            st.session_state.agent = IntelligentDisputeAgent(config.get('openai_api_key'))
             st.session_state.initialized = True
         except ValueError as e:
             st.error(f"Configuration error: {e}")
@@ -236,10 +236,10 @@ def render_header():
         st.markdown("""
         <div style="text-align: center; padding: 2rem 0;">
             <h1 style="color: #1D1D1F; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;">
-                🏦 Banking Dispute Agent
+                🏦 banking-dispute-assistant-v1
             </h1>
             <p style="color: #6D6D70; font-size: 1.125rem; margin: 0;">
-                AI-powered dispute processing with agentic workflows
+                Intelligent dispute resolution powered by AI function calling
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -645,7 +645,7 @@ def main():
     st.markdown("---")
     st.markdown("""
     <div style="text-align: center; color: #6D6D70; font-size: 0.875rem; padding: 1rem;">
-        Banking Dispute Agent v1.0 | Powered by OpenAI GPT-4o Mini & LangChain
+        banking-dispute-assistant-v1 | Powered by OpenAI Function Calling
     </div>
     """, unsafe_allow_html=True)
 

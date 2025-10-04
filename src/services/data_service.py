@@ -57,13 +57,20 @@ class DataService:
         """Get transactions for a card in the last N days"""
         df = self._load_transactions()
         
+        # Convert card_last_four to string for comparison (handle both string and int types in CSV)
+        df_card_str = df['card_last_four'].astype(str)
+        
         # Filter by card last four digits
-        filtered_df = df[df['card_last_four'] == card_last_four]
+        filtered_df = df[df_card_str == str(card_last_four)]
         
         # Convert to Transaction objects
         transactions = []
         for _, row in filtered_df.iterrows():
-            transactions.append(Transaction(**row.to_dict()))
+            row_dict = row.to_dict()
+            # Convert numeric fields to strings where needed
+            row_dict['card_number'] = str(row_dict['card_number'])
+            row_dict['card_last_four'] = str(row_dict['card_last_four'])
+            transactions.append(Transaction(**row_dict))
         
         return transactions
     
@@ -71,17 +78,24 @@ class DataService:
         """Find a specific transaction by card, amount, and merchant"""
         df = self._load_transactions()
         
+        # Convert card_last_four to string for comparison (handle both string and int types in CSV)
+        df_card_str = df['card_last_four'].astype(str)
+        
         # Filter by criteria
         filtered_df = df[
-            (df['card_last_four'] == card_last_four) &
+            (df_card_str == str(card_last_four)) &
             (abs(df['amount'] - amount) < 0.01) &  # Allow small floating point differences
             (df['merchant_name'].str.contains(merchant_name, case=False, na=False))
         ]
         
         if not filtered_df.empty:
             # Return the first match
-            row = filtered_df.iloc[0]
-            return Transaction(**row.to_dict())
+            row = filtered_df.iloc[0].copy()
+            # Convert numeric fields to strings where needed
+            row_dict = row.to_dict()
+            row_dict['card_number'] = str(row_dict['card_number'])
+            row_dict['card_last_four'] = str(row_dict['card_last_four'])
+            return Transaction(**row_dict)
         
         return None
     
@@ -111,7 +125,7 @@ class DataService:
         
         return disputes
     
-    def get_merchant_risk(self, merchant_name: str) -> Optional[MerchantRisk]:
+    def get_merchant_risk_data(self, merchant_name: str) -> Optional[MerchantRisk]:
         """Get risk data for a specific merchant"""
         df = self._load_merchant_risk()
         
@@ -123,6 +137,32 @@ class DataService:
             return MerchantRisk(**row.to_dict())
         
         return None
+    
+    def get_dispute_policies_by_category(self, category: str) -> List[DisputePolicy]:
+        """Get dispute policies by category"""
+        df = self._load_policies()
+        
+        # Filter by category
+        filtered_df = df[df['category'].str.contains(category, case=False, na=False)]
+        
+        policies = []
+        for _, row in filtered_df.iterrows():
+            # Convert documentation_required from string to list
+            doc_req = row['documentation_required']
+            if isinstance(doc_req, str):
+                # Parse string representation of list
+                import ast
+                try:
+                    doc_req = ast.literal_eval(doc_req)
+                except (ValueError, SyntaxError):
+                    # Fallback to simple comma-separated parsing
+                    doc_req = [doc.strip() for doc in doc_req.split(',')]
+            row_dict = row.to_dict()
+            row_dict['documentation_required'] = doc_req
+            
+            policies.append(DisputePolicy(**row_dict))
+        
+        return policies
     
     def get_network_rules_by_category(self, category: str) -> List[NetworkRule]:
         """Get network rules by dispute category"""
@@ -159,8 +199,13 @@ class DataService:
             # Convert documentation_required from string to list
             doc_req = row['documentation_required']
             if isinstance(doc_req, str):
-                # Simple parsing - assume comma-separated values
-                doc_req = [doc.strip() for doc in doc_req.split(',')]
+                # Parse string representation of list
+                import ast
+                try:
+                    doc_req = ast.literal_eval(doc_req)
+                except (ValueError, SyntaxError):
+                    # Fallback to simple comma-separated parsing
+                    doc_req = [doc.strip() for doc in doc_req.split(',')]
             row_dict = row.to_dict()
             row_dict['documentation_required'] = doc_req
             

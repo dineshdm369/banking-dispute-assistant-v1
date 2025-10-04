@@ -1,8 +1,8 @@
-# 📋 Banking Dispute Agent - Technical Specification
+# 📋 banking-dispute-assistant-v1 - Technical Specification
 
 ## System Overview
 
-The Banking Dispute Agent is an educational AI system demonstrating agentic workflow patterns for financial service automation. It processes banking disputes through a sophisticated multi-stage analysis pipeline using OpenAI's GPT-4o Mini model.
+The banking-dispute-assistant-v1 is an educational AI system demonstrating agentic workflow patterns for financial service automation. It processes banking disputes through a sophisticated multi-stage analysis pipeline using OpenAI's GPT-4o Mini model.
 
 ## Functional Requirements
 
@@ -274,7 +274,7 @@ OPENAI_API_KEY=sk-proj-...           # Required
 OPENAI_MODEL=gpt-4o-mini             # Default
 
 # Application Settings
-APP_NAME=Banking Dispute Agent        # Display name
+APP_NAME=banking-dispute-assistant-v1        # Display name
 DEBUG=false                          # Debug mode
 LOG_LEVEL=INFO                       # Logging level
 
@@ -372,4 +372,4 @@ CMD ["streamlit", "run", "streamlit_app.py", "--server.address", "0.0.0.0"]
 - Microservice architecture support
 - Cloud deployment optimization
 
-This specification serves as the authoritative technical reference for the Banking Dispute Agent educational system, ensuring consistent implementation and maintenance standards.
+This specification serves as the authoritative technical reference for the banking-dispute-assistant-v1 educational system, ensuring consistent implementation and maintenance standards.

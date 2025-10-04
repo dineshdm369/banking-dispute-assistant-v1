@@ -1,13 +1,13 @@
-# Banking Dispute Agent Requirements
+# banking-dispute-assistant-v1 Requirements
 
 # Core dependencies
 streamlit==1.28.1
-openai==1.6.1
+openai==1.51.0
 python-dotenv==1.0.0
 
 # Data processing
-pandas==2.1.4
-numpy==1.24.3
+pandas>=2.1.0
+numpy>=1.24.0
 faker==20.1.0
 
 # Async processing

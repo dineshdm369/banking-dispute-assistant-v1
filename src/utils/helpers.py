@@ -7,15 +7,43 @@ import uuid
 
 
 def setup_logging(log_level: str = "INFO") -> None:
-    """Set up application logging"""
+    """Set up application logging with structured fields"""
     
-    logging.basicConfig(
-        level=getattr(logging, log_level.upper()),
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.StreamHandler(),
-        ]
+    class StructuredFormatter(logging.Formatter):
+        """Custom formatter that includes extra fields like user_id and session_id"""
+        
+        def format(self, record):
+            # Standard formatting
+            formatted = super().format(record)
+            
+            # Add extra fields if they exist
+            extras = []
+            if hasattr(record, 'user_id') and record.user_id:
+                extras.append(f"user_id={record.user_id}")
+            if hasattr(record, 'session_id') and record.session_id:
+                extras.append(f"session_id={record.session_id}")
+            if hasattr(record, 'dispute_id') and record.dispute_id:
+                extras.append(f"dispute_id={record.dispute_id}")
+            if hasattr(record, 'function') and record.function:
+                extras.append(f"function={record.function}")
+            
+            if extras:
+                formatted += f" [{', '.join(extras)}]"
+            
+            return formatted
+    
+    # Create custom handler with structured formatter
+    handler = logging.StreamHandler()
+    formatter = StructuredFormatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
+    handler.setFormatter(formatter)
+    
+    # Configure root logger
+    root_logger = logging.getLogger()
+    root_logger.setLevel(getattr(logging, log_level.upper()))
+    root_logger.handlers.clear()  # Clear existing handlers
+    root_logger.addHandler(handler)
     
     # Reduce noise from external libraries
     logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -30,7 +58,7 @@ def load_environment() -> Dict[str, Any]:
     
     config = {
         "openai_api_key": os.getenv("OPENAI_API_KEY"),
-        "app_name": os.getenv("APP_NAME", "Banking Dispute Agent"),
+        "app_name": os.getenv("APP_NAME", "banking-dispute-assistant-v1"),
         "debug": os.getenv("DEBUG", "false").lower() == "true",
         "log_level": os.getenv("LOG_LEVEL", "INFO"),
         "api_timeout": int(os.getenv("API_TIMEOUT", "30")),

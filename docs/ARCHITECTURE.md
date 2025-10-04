@@ -1,15 +1,15 @@
-# 🏗️ Banking Dispute Agent - System Architecture
+# 🏗️ banking-dispute-assistant-v1 - System Architecture
 
 ## Overview
 
-The Banking Dispute Agent is designed as a modern, agentic AI system that demonstrates sophisticated workflow orchestration patterns. The architecture follows clean separation of concerns, async processing capabilities, and observability-first design principles.
+The banking-dispute-assistant-v1 is designed as a modern, agentic AI system that demonstrates sophisticated workflow orchestration patterns. The architecture follows clean separation of concerns, async processing capabilities, and observability-first design principles.
 
 ## High-Level Architecture
 
 ```mermaid
 graph TB
     UI[Streamlit UI Layer] --> AUTH[User Authentication]
-    AUTH --> AGENT[Banking Dispute Agent]
+    AUTH --> AGENT[banking-dispute-assistant-v1]
     AGENT --> ORCHESTRATOR[Workflow Orchestrator]
     
     ORCHESTRATOR --> LANE_A[Lane A: Past Disputes]
@@ -45,7 +45,7 @@ graph TB
 
 ### 2. Agent Layer
 
-**Banking Dispute Agent (`src/agents/dispute_agent.py`)**
+**banking-dispute-assistant-v1 (`src/agents/intelligent_dispute_agent.py`)**
 - Core agentic workflow implementation
 - Async parallel lane processing
 - Self-critique and quality assessment

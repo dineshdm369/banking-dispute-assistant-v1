@@ -118,6 +118,15 @@ class LaneResult(BaseModel):
     error_message: Optional[str] = None
 
 
+class FunctionCall(BaseModel):
+    id: str
+    function_name: str
+    arguments: Dict[str, Any]
+    result: Optional[Dict[str, Any]] = None
+    error: Optional[str] = None
+    execution_time: Optional[float] = None
+
+
 class AgentStep(BaseModel):
     model_config = ConfigDict(json_encoders={datetime: lambda v: v.isoformat()})
     
@@ -128,8 +137,9 @@ class AgentStep(BaseModel):
     duration: Optional[float] = None
     inputs: Dict[str, Any]
     outputs: Dict[str, Any]
-    confidence: float
-    reasoning: str
+    confidence: Optional[float] = None
+    reasoning: Optional[str] = None
+    function_calls: List[FunctionCall] = []
 
 
 class DisputeAssessment(BaseModel):
@@ -156,7 +166,9 @@ class DisputeResponse(BaseModel):
     temporary_credit_issued: bool
     temporary_credit_amount: float
     estimated_resolution_days: int
-    confidence_score: float
+    confidence_score: Optional[float] = None
     next_steps: List[str]
     supporting_evidence: List[str]
     processing_steps: List[AgentStep]
+    total_function_calls: int = 0
+    reasoning: Optional[str] = None

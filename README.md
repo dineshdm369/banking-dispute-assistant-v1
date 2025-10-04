@@ -1,42 +1,55 @@
-# 🏦 Banking Dispute Agent
+# 🏦 banking-dispute-assistant-v1
 
-An AI-powered banking dispute processing system that demonstrates agentic workflow patterns using OpenAI's GPT-4o Mini and a sophisticated multi-lane analysis approach.
+An intelligent dispute resolution system powered by OpenAI's function calling capabilities. The system uses dynamic AI decision-making to investigate, analyze, and resolve customer disputes efficiently.
 
 ## 🚀 Features
 
 ### Enhanced User Experience
 - **User Authentication**: Role-based user selection with department tracking
-- **Session Management**: Unique session IDs for complete audit trails
-- **Real-time Progress**: Live updates during multi-stage processing
+- **Complete Session Management**: Full session tracking with user_id and session_id across all operations
+- **Enhanced Logging**: Structured logging with session context for complete audit trails
+- **Real-time Progress**: Live updates during dispute processing with detailed function execution tracking
 - **Apple-inspired UI**: Clean, intuitive interface with responsive design
 
-### Agentic Workflow Implementation
-The system implements a comprehensive agentic workflow:
+### Intelligent Function Calling Architecture
+The system implements an advanced AI-driven workflow using OpenAI's function calling:
 
-1. **Plan** - Decide analysis steps and strategy
-2. **Retrieve** - Pull transaction data and policies  
-3. **Fork** - Execute parallel analysis lanes:
-   - **Lane A**: Past disputes analysis for similar merchants
-   - **Lane B**: Merchant risk signal assessment  
-   - **Lane C**: Payment network rules compliance check
-4. **Synthesize** - Merge findings from all lanes
-5. **Generate** - Create customer response and back-office notes
-6. **Act** - File dispute and issue temporary credit via APIs
-7. **Critique** - Self-assessment for quality and completeness
-8. **Finalize** - Complete processing with potential loop-back
+- **Dynamic Investigation**: AI decides which analyses to perform based on dispute specifics
+- **Parallel Execution**: Multiple function calls executed simultaneously for efficiency
+- **Adaptive Reasoning**: Decisions made based on gathered evidence and available data
+- **Context-Aware Processing**: Each dispute handled according to its unique characteristics
+
+### Available AI Functions
+**Analysis Functions:**
+- `search_past_disputes` - Find patterns in historical dispute data
+- `assess_merchant_risk` - Evaluate merchant risk profiles and fraud indicators  
+- `check_network_rules` - Verify compliance with payment network requirements
+- `find_transaction_details` - Locate and analyze specific transactions
+- `get_customer_dispute_history` - Review customer's dispute patterns
+- `check_dispute_policies` - Validate against internal bank policies
+
+**Action Functions:**
+- `check_account_eligibility` - Verify account status and restrictions
+- `calculate_temporary_credit` - Determine appropriate credit amounts
+- `issue_temporary_credit` - Process provisional credits to customer accounts
+- `file_dispute_with_network` - Submit disputes to Visa/Mastercard networks
+- `send_customer_notification` - Communicate updates via email/SMS
+- `update_case_management` - Record decisions in back-office systems
 
 ### Technical Capabilities
-- **OpenAI Integration**: Uses GPT-4o Mini with function calling and structured output
-- **Parallel Processing**: Async execution of analysis lanes for efficiency  
+- **OpenAI Integration**: Uses GPT-4o Mini with advanced function calling
+- **Intelligent Routing**: AI determines optimal investigation paths  
 - **Mock Banking APIs**: Realistic simulation of dispute filing and credit systems
 - **Data Validation**: Pydantic v2 models with comprehensive validation
 - **Error Handling**: Robust error recovery and safe JSON serialization
-- **Observability Ready**: Structured for future tracing and monitoring integration
+- **Complete Session Tracking**: Every function call tracked with user_id and session_id
+- **Enhanced Observability**: Structured logging with session context for monitoring and debugging
+- **Production-Ready**: Session management and audit trails suitable for enterprise deployment
 
 ## 📁 Project Structure
 
 ```
-banking-dispute-agent/
+banking-dispute-assistant-v1/
 ├── data/                    # Mock data files (CSV format)
 │   ├── users.csv            # 10 user profiles with departments
 │   ├── transactions.csv     # 50 realistic banking transactions
@@ -48,25 +61,26 @@ banking-dispute-agent/
 │   ├── ARCHITECTURE.md      # System architecture guide
 │   └── SPECIFICATION.md     # Technical specifications
 ├── src/
-│   ├── agents/             # Core agent implementation
-│   │   └── dispute_agent.py # Main agentic workflow
-│   ├── services/           # Service layer
-│   │   ├── data_service.py    # Data access and querying
-│   │   ├── openai_service.py  # OpenAI API integration
-│   │   └── mock_api_service.py # Mock banking APIs
-│   ├── models/             # Pydantic v2 data models
-│   │   └── __init__.py     # All data models and types
-│   └── utils/              # Utility functions
-│       └── helpers.py      # Common utilities and safe JSON handling
-├── streamlit_app.py        # Main UI application with user auth
-├── test_system.py          # System verification script
-├── generate_mock_data.py   # Data generation utility
-├── requirements.txt        # Python dependencies
-├── Dockerfile             # Container configuration
-├── docker-compose.yml     # Multi-service deployment
-├── LICENSE                # MIT License
-├── .env.example           # Environment template
-└── .env                   # Environment configuration
+│   ├── agents/              # AI agent implementation
+│   │   └── intelligent_dispute_agent.py # Function calling AI agent
+│   ├── services/            # Service layer
+│   │   ├── data_service.py       # Data access and querying
+│   │   ├── openai_service.py     # OpenAI API with function calling
+│   │   ├── function_registry.py  # Available AI functions
+│   │   └── mock_api_service.py   # Mock banking APIs
+│   ├── models/              # Pydantic v2 data models
+│   │   └── __init__.py      # All data models and types
+│   └── utils/               # Utility functions
+│       └── helpers.py       # Common utilities and safe JSON handling
+├── streamlit_app.py         # Main UI application with user auth
+├── test_system.py           # System verification script
+├── generate_mock_data.py    # Data generation utility
+├── requirements.txt         # Python dependencies
+├── Dockerfile              # Container configuration
+├── docker-compose.yml      # Multi-service deployment
+├── LICENSE                 # MIT License
+├── .env.example            # Environment template
+└── .env                    # Environment configuration
 ```
 
 ## 🛠️ Installation & Setup
@@ -164,7 +178,7 @@ The interface provides detailed visibility into:
 OPENAI_API_KEY=your_openai_api_key_here
 
 # Application Settings
-APP_NAME=Banking Dispute Agent
+APP_NAME=banking-dispute-assistant-v1
 DEBUG=false
 LOG_LEVEL=INFO
 
@@ -172,9 +186,24 @@ LOG_LEVEL=INFO
 CONFIDENCE_THRESHOLD=0.7    # Minimum confidence for auto-approval
 PROCESSING_DELAY=2          # Delay between steps (for demo)
 MAX_PARALLEL_LANES=3        # Number of analysis lanes
+MAX_CONVERSATION_TURNS=10   # Maximum AI conversation turns
 
 # Mock API Settings
 MOCK_API_DELAY=1.5          # Simulated API response time
+```
+
+### Session Tracking & Logging
+
+The system now includes comprehensive session tracking:
+
+- **User Context**: Every operation includes user_id and session_id
+- **Function Tracing**: All function calls logged with session context
+- **Audit Trails**: Complete traceability from user action to final result
+- **Enhanced Debugging**: Filter logs by session_id to see complete workflows
+
+Example log output:
+```bash
+2025-10-04 11:54:17,608 - src.services.function_registry - INFO - Executing function get_customer_dispute_history [user_id=USR002, session_id=USR002_20251004_115317_57ea012e, function=get_customer_dispute_history]
 ```
 
 ### Customization
@@ -200,12 +229,20 @@ All data uses realistic but fake information suitable for testing and education.
 ## 🔮 Future Enhancements
 
 ### Observability Integration
-The system is designed for easy integration with observability tools:
+The system includes comprehensive session tracking and enhanced logging:
 
-- **Tracing**: Each agent step is structured for distributed tracing
-- **Metrics**: Confidence scores and processing times are tracked
-- **Logging**: Structured logs with correlation IDs
-- **Monitoring**: Health checks and performance metrics
+- **Session Tracking**: Complete user_id and session_id propagation through all operations
+- **Structured Logging**: Enhanced logging format with session context for every function call
+- **Audit Trails**: Full traceability from user action to system response
+- **Monitoring Ready**: Built-in support for APM tools (Datadog, New Relic, OpenTelemetry)
+- **Cost Attribution**: Track OpenAI API usage by user and session
+- **Performance Monitoring**: Function-level timing and success rates
+
+### Recent Enhancements
+- ✅ **Complete Session Tracking**: Every log entry includes user and session context
+- ✅ **Enhanced Function Registry**: Session context propagated to all function calls  
+- ✅ **Improved Error Handling**: Better validation and type conversion for CSV data
+- ✅ **Production-Ready Logging**: Structured logging suitable for enterprise monitoring
 
 ### Planned Features
 - [ ] Integration with OpenTelemetry for tracing
