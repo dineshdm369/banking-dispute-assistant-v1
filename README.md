@@ -6,10 +6,8 @@ An intelligent dispute resolution system powered by OpenAI's function calling ca
 
 ### Enhanced User Experience
 - **User Authentication**: Role-based user selection with department tracking
-- **Complete Session Management**: Full session tracking with user_id and session_id across all operations
 - **Enhanced Logging**: Structured logging with session context for complete audit trails
 - **Real-time Progress**: Live updates during dispute processing with detailed function execution tracking
-- **Apple-inspired UI**: Clean, intuitive interface with responsive design
 
 ### Intelligent Function Calling Architecture
 The system implements an advanced AI-driven workflow using OpenAI's function calling:
@@ -42,8 +40,6 @@ The system implements an advanced AI-driven workflow using OpenAI's function cal
 - **Mock Banking APIs**: Realistic simulation of dispute filing and credit systems
 - **Data Validation**: Pydantic v2 models with comprehensive validation
 - **Error Handling**: Robust error recovery and safe JSON serialization
-- **Complete Session Tracking**: Every function call tracked with user_id and session_id
-- **Enhanced Observability**: Structured logging with session context for monitoring and debugging
 - **Production-Ready**: Session management and audit trails suitable for enterprise deployment
 
 ## 📁 Project Structure
@@ -192,20 +188,6 @@ MAX_CONVERSATION_TURNS=10   # Maximum AI conversation turns
 MOCK_API_DELAY=1.5          # Simulated API response time
 ```
 
-### Session Tracking & Logging
-
-The system now includes comprehensive session tracking:
-
-- **User Context**: Every operation includes user_id and session_id
-- **Function Tracing**: All function calls logged with session context
-- **Audit Trails**: Complete traceability from user action to final result
-- **Enhanced Debugging**: Filter logs by session_id to see complete workflows
-
-Example log output:
-```bash
-2025-10-04 11:54:17,608 - src.services.function_registry - INFO - Executing function get_customer_dispute_history [user_id=USR002, session_id=USR002_20251004_115317_57ea012e, function=get_customer_dispute_history]
-```
-
 ### Customization
 
 - **Data**: Replace CSV files in `/data` with your own datasets
@@ -225,34 +207,6 @@ The system includes realistic mock data:
 - **3 dispute policies** covering different categories
 
 All data uses realistic but fake information suitable for testing and education.
-
-## 🔮 Future Enhancements
-
-### Observability Integration
-The system includes comprehensive session tracking and enhanced logging:
-
-- **Session Tracking**: Complete user_id and session_id propagation through all operations
-- **Structured Logging**: Enhanced logging format with session context for every function call
-- **Audit Trails**: Full traceability from user action to system response
-- **Monitoring Ready**: Built-in support for APM tools (Datadog, New Relic, OpenTelemetry)
-- **Cost Attribution**: Track OpenAI API usage by user and session
-- **Performance Monitoring**: Function-level timing and success rates
-
-### Recent Enhancements
-- ✅ **Complete Session Tracking**: Every log entry includes user and session context
-- ✅ **Enhanced Function Registry**: Session context propagated to all function calls  
-- ✅ **Improved Error Handling**: Better validation and type conversion for CSV data
-- ✅ **Production-Ready Logging**: Structured logging suitable for enterprise monitoring
-
-### Planned Features
-- [ ] Integration with OpenTelemetry for tracing
-- [ ] Real banking API connections
-- [ ] Advanced ML risk scoring
-- [ ] Multi-language support
-- [ ] Compliance reporting dashboard
-- [ ] Database integration (PostgreSQL/MongoDB)
-- [ ] Role-based access control (RBAC)
-- [ ] API rate limiting and caching
 
 ## 🛡️ Security & Privacy
 
